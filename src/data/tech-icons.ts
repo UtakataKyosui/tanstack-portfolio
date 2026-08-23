@@ -1,0 +1,73 @@
+import {
+	siActix,
+	siAstro,
+	siCss,
+	siDocker,
+	siGo,
+	siHcl,
+	siHono,
+	siHtml5,
+	siJavascript,
+	siJupyter,
+	siKotlin,
+	siLatex,
+	siMdx,
+	siNextdotjs,
+	siPython,
+	siReact,
+	siRuby,
+	siRust,
+	siSass,
+	siShell,
+	siSvelte,
+	siSwift,
+	siTailwindcss,
+	siTanstack,
+	siTauri,
+	siTokio,
+	siTypescript,
+	siVite,
+	siVuedotjs,
+} from "simple-icons";
+
+type IconData = { path: string; hex: string; title: string };
+
+// Display names come from GitHub repo `language` fields and dependency
+// names, not from Simple Icons — map the ones that differ from their title.
+const ICON_BY_LABEL: Record<string, IconData> = {
+	React: siReact,
+	"Tailwind CSS": siTailwindcss,
+	Tokio: siTokio,
+	Vite: siVite,
+	Tauri: siTauri,
+	"Next.js": siNextdotjs,
+	"TanStack Query": siTanstack,
+	"TanStack Start": siTanstack,
+	"TanStack Router": siTanstack,
+	Astro: siAstro,
+	Hono: siHono,
+	Vue: siVuedotjs,
+	Svelte: siSvelte,
+	Actix: siActix,
+	TypeScript: siTypescript,
+	Rust: siRust,
+	Python: siPython,
+	Go: siGo,
+	HCL: siHcl,
+	Shell: siShell,
+	HTML: siHtml5,
+	CSS: siCss,
+	Ruby: siRuby,
+	TeX: siLatex,
+	Dockerfile: siDocker,
+	Kotlin: siKotlin,
+	Swift: siSwift,
+	JavaScript: siJavascript,
+	"Jupyter Notebook": siJupyter,
+	MDX: siMdx,
+	SCSS: siSass,
+};
+
+export function techIcon(name: string): IconData | null {
+	return ICON_BY_LABEL[name] ?? null;
+}

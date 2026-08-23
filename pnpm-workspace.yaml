@@ -1,0 +1,7 @@
+allowBuilds:
+  '@google/genai': true
+  esbuild: true
+  lightningcss: true
+  protobufjs: true
+  sharp: true
+  workerd: true

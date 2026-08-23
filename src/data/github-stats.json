@@ -1,0 +1,232 @@
+{
+	"login": "UtakataKyosui",
+	"generatedAt": "2026-08-24T09:51:24.751Z",
+	"repoCount": 209,
+	"languages": [
+		{
+			"name": "TypeScript",
+			"bytes": 23930557,
+			"percent": 55.1
+		},
+		{
+			"name": "Rust",
+			"bytes": 9119708,
+			"percent": 21
+		},
+		{
+			"name": "Python",
+			"bytes": 2183190,
+			"percent": 5
+		},
+		{
+			"name": "HCL",
+			"bytes": 1980455,
+			"percent": 4.6
+		},
+		{
+			"name": "JavaScript",
+			"bytes": 1790921,
+			"percent": 4.1
+		},
+		{
+			"name": "Shell",
+			"bytes": 1111035,
+			"percent": 2.6
+		},
+		{
+			"name": "HTML",
+			"bytes": 965687,
+			"percent": 2.2
+		},
+		{
+			"name": "Go",
+			"bytes": 845943,
+			"percent": 1.9
+		},
+		{
+			"name": "CSS",
+			"bytes": 695021,
+			"percent": 1.6
+		},
+		{
+			"name": "Ruby",
+			"bytes": 322220,
+			"percent": 0.7
+		},
+		{
+			"name": "TeX",
+			"bytes": 167749,
+			"percent": 0.4
+		},
+		{
+			"name": "Dockerfile",
+			"bytes": 77048,
+			"percent": 0.2
+		},
+		{
+			"name": "Kotlin",
+			"bytes": 74346,
+			"percent": 0.2
+		},
+		{
+			"name": "Swift",
+			"bytes": 38686,
+			"percent": 0.1
+		},
+		{
+			"name": "Just",
+			"bytes": 34488,
+			"percent": 0.1
+		},
+		{
+			"name": "Astro",
+			"bytes": 27946,
+			"percent": 0.1
+		},
+		{
+			"name": "WGSL",
+			"bytes": 18987,
+			"percent": 0
+		},
+		{
+			"name": "Jupyter Notebook",
+			"bytes": 13022,
+			"percent": 0
+		},
+		{
+			"name": "Bru",
+			"bytes": 12116,
+			"percent": 0
+		},
+		{
+			"name": "Nix",
+			"bytes": 10451,
+			"percent": 0
+		},
+		{
+			"name": "Raku",
+			"bytes": 8441,
+			"percent": 0
+		},
+		{
+			"name": "Makefile",
+			"bytes": 7142,
+			"percent": 0
+		},
+		{
+			"name": "Perl",
+			"bytes": 6038,
+			"percent": 0
+		},
+		{
+			"name": "MDX",
+			"bytes": 3204,
+			"percent": 0
+		},
+		{
+			"name": "Handlebars",
+			"bytes": 2206,
+			"percent": 0
+		},
+		{
+			"name": "SCSS",
+			"bytes": 1396,
+			"percent": 0
+		},
+		{
+			"name": "LOLCODE",
+			"bytes": 1231,
+			"percent": 0
+		},
+		{
+			"name": "Go Template",
+			"bytes": 408,
+			"percent": 0
+		},
+		{
+			"name": "Mermaid",
+			"bytes": 406,
+			"percent": 0
+		},
+		{
+			"name": "Batchfile",
+			"bytes": 325,
+			"percent": 0
+		},
+		{
+			"name": "RenderScript",
+			"bytes": 43,
+			"percent": 0
+		}
+	],
+	"frameworks": [
+		{
+			"name": "Serde",
+			"repoCount": 27
+		},
+		{
+			"name": "React",
+			"repoCount": 24
+		},
+		{
+			"name": "Tailwind CSS",
+			"repoCount": 21
+		},
+		{
+			"name": "Tokio",
+			"repoCount": 18
+		},
+		{
+			"name": "Vite",
+			"repoCount": 12
+		},
+		{
+			"name": "Tauri",
+			"repoCount": 11
+		},
+		{
+			"name": "Next.js",
+			"repoCount": 11
+		},
+		{
+			"name": "Axum",
+			"repoCount": 7
+		},
+		{
+			"name": "Cobra",
+			"repoCount": 3
+		},
+		{
+			"name": "TanStack Query",
+			"repoCount": 3
+		},
+		{
+			"name": "Astro",
+			"repoCount": 3
+		},
+		{
+			"name": "TanStack Start",
+			"repoCount": 1
+		},
+		{
+			"name": "TanStack Router",
+			"repoCount": 1
+		},
+		{
+			"name": "Hono",
+			"repoCount": 1
+		},
+		{
+			"name": "Vue",
+			"repoCount": 1
+		},
+		{
+			"name": "Svelte",
+			"repoCount": 1
+		},
+		{
+			"name": "Actix",
+			"repoCount": 1
+		}
+	]
+}

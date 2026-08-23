@@ -1,0 +1,29 @@
+{
+  "projectName": "portfolio",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "pnpm",
+  "includeExamples": true,
+  "tailwind": true,
+  "projectPreset": "default",
+  "addOnOptions": {},
+  "git": true,
+  "install": true,
+  "intent": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "biome",
+    "cloudflare",
+    "strapi",
+    "ai",
+    "compiler",
+    "mcp",
+    "shadcn",
+    "t3env",
+    "table",
+    "tanstack-query",
+    "store"
+  ]
+}
