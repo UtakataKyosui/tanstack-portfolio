@@ -43,15 +43,30 @@ pnpm check
 
 ## Deploy to Cloudflare Workers
 
-This project uses the Cloudflare Vite plugin (configured in `vite.config.ts`) and `wrangler.jsonc`:
+This project uses the Cloudflare Vite plugin (configured in `vite.config.ts`) and `wrangler.jsonc`. `package.json` also provides a `pnpm deploy` script (`build` + `wrangler deploy`).
 
-1. Install Wrangler: `npm install -g wrangler`
+### 事前設定チェック
+
+- **Worker 名**: `wrangler.jsonc` の `name` は `tanstack-portfolio`。初回デプロイ時にこの名前で新しい Worker が作成される（まだ一度もデプロイしていないため、既存 Worker との衝突は無い）。
+- **`compatibility_date`**: 現状 `2025-09-02`。デプロイ前に [Cloudflare Workers の compatibility date](https://developers.cloudflare.com/workers/configuration/compatibility-dates/) を確認し、必要なら実デプロイ時に最新日付へ更新するかどうかを判断する。
+- **環境変数 / シークレット**: 現時点でこのアプリはビルド時に静的な JSON を import しているだけで、実行時に外部 API やシークレットを利用する機能は無い（`src/env.ts` は `SERVER_URL` / `VITE_APP_TITLE` を宣言しているが、どちらもコード内から一切 import/使用されていない）。そのため **現時点では Cloudflare 側で `wrangler secret put` するシークレットは不要**。`src/env.ts` を今後使う予定が無いなら削除、使う予定があるなら実際に値を参照する箇所を追加する、のどちらかを別途検討する。
+- **OGP / メタタグ**: `src/routes/__root.tsx` に `og:title` / `og:description` / `twitter:card` 等は追加済み。`og:image`（1200x630px 目安）と `og:url` は画像ファイルと本番ドメインが決まってから追加する（該当箇所に TODO コメントあり）。
+
+### デプロイ手順
+
+1. Install Wrangler: `npm install -g wrangler`（または既に devDependencies にある `wrangler` を `pnpm exec wrangler ...` で使ってもよい）
 2. Authenticate: `wrangler login`
-3. Deploy: `npx wrangler deploy`
+3. Deploy: `npx wrangler deploy`（もしくは `pnpm deploy`）
 
-For production env vars, run `wrangler secret put MY_VAR` for each secret listed in `.env.example`. Public (non-secret) vars go in `wrangler.jsonc` under `vars`.
+For production env vars, run `wrangler secret put MY_VAR` for each secret the app actually needs at runtime (see above — currently none). Public (non-secret) vars go in `wrangler.jsonc` under `vars`.
 
 KV, D1, R2, and Durable Object bindings are configured in `wrangler.jsonc` — see https://developers.cloudflare.com/workers/wrangler/configuration/.
+
+### 本人が実施する残タスク（このリポジトリの自動化では行わない）
+
+- [ ] `wrangler deploy`（または `pnpm deploy`）を実行して実際にデプロイし、公開された URL で動作確認する
+- [ ] 独自ドメインを使うかどうかを決め、使う場合は Cloudflare 側でカスタムドメインを設定する
+- [ ] 独自ドメインが決まったら OGP の `og:image` / `og:url`（および `twitter:image`）を追加する
 
 
 ## GitHub Stats の生成
