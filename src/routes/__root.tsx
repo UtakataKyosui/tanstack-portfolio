@@ -29,7 +29,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "Portfolio",
+				title: "UtakataKyosui — Frontend Engineer",
+			},
+			{
+				name: "description",
+				content:
+					"「気をつける」を仕組みに変えるフロントエンドエンジニア、UtakataKyosui のポートフォリオ。",
 			},
 		],
 		links: [

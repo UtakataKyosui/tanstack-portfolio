@@ -20,6 +20,8 @@ import { Route as DemoStoreRouteImport } from './routes/demo/store'
 import { Route as DemoStrapiRouteImport } from './routes/demo/strapi'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
+import { Route as WorksIndexRouteImport } from './routes/works/index'
+import { Route as WorksSlugRouteImport } from './routes/works/$slug'
 import { Route as DemoApiMcpTodosRouteImport } from './routes/demo/api.mcp-todos'
 import { Route as DemoGuitarsIndexRouteImport } from './routes/demo/guitars/index'
 import { Route as DemoGuitarsGuitarIdRouteImport } from './routes/demo/guitars/$guitarId'
@@ -85,6 +87,16 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorksIndexRoute = WorksIndexRouteImport.update({
+  id: '/works/',
+  path: '/works/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorksSlugRoute = WorksSlugRouteImport.update({
+  id: '/works/$slug',
+  path: '/works/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoApiMcpTodosRoute = DemoApiMcpTodosRouteImport.update({
   id: '/demo/api/mcp-todos',
   path: '/demo/api/mcp-todos',
@@ -143,6 +155,8 @@ export interface FileRoutesByFullPath {
   '/demo/strapi': typeof DemoStrapiRouteWithChildren
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/works/$slug': typeof WorksSlugRoute
+  '/works/': typeof WorksIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
   '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
@@ -165,6 +179,8 @@ export interface FileRoutesByTo {
   '/demo/strapi': typeof DemoStrapiRouteWithChildren
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/works/$slug': typeof WorksSlugRoute
+  '/works': typeof WorksIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
   '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
@@ -188,6 +204,8 @@ export interface FileRoutesById {
   '/demo/strapi': typeof DemoStrapiRouteWithChildren
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/works/$slug': typeof WorksSlugRoute
+  '/works/': typeof WorksIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
   '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
@@ -212,6 +230,8 @@ export interface FileRouteTypes {
     | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/works/$slug'
+    | '/works/'
     | '/demo/api/mcp-todos'
     | '/demo/guitars/$guitarId'
     | '/demo/strapi/$articleId'
@@ -234,6 +254,8 @@ export interface FileRouteTypes {
     | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/works/$slug'
+    | '/works'
     | '/demo/api/mcp-todos'
     | '/demo/guitars/$guitarId'
     | '/demo/strapi/$articleId'
@@ -256,6 +278,8 @@ export interface FileRouteTypes {
     | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/works/$slug'
+    | '/works/'
     | '/demo/api/mcp-todos'
     | '/demo/guitars/$guitarId'
     | '/demo/strapi/$articleId'
@@ -279,6 +303,8 @@ export interface RootRouteChildren {
   DemoStrapiRoute: typeof DemoStrapiRouteWithChildren
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  WorksSlugRoute: typeof WorksSlugRoute
+  WorksIndexRoute: typeof WorksIndexRoute
   DemoApiMcpTodosRoute: typeof DemoApiMcpTodosRoute
   DemoGuitarsGuitarIdRoute: typeof DemoGuitarsGuitarIdRoute
   DemoGuitarsIndexRoute: typeof DemoGuitarsIndexRoute
@@ -366,6 +392,20 @@ declare module '@tanstack/react-router' {
       path: '/demo/tanstack-query'
       fullPath: '/demo/tanstack-query'
       preLoaderRoute: typeof DemoTanstackQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/works/': {
+      id: '/works/'
+      path: '/works'
+      fullPath: '/works/'
+      preLoaderRoute: typeof WorksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/works/$slug': {
+      id: '/works/$slug'
+      path: '/works/$slug'
+      fullPath: '/works/$slug'
+      preLoaderRoute: typeof WorksSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/api/mcp-todos': {
@@ -458,6 +498,8 @@ const rootRouteChildren: RootRouteChildren = {
   DemoStrapiRoute: DemoStrapiRouteWithChildren,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  WorksSlugRoute: WorksSlugRoute,
+  WorksIndexRoute: WorksIndexRoute,
   DemoApiMcpTodosRoute: DemoApiMcpTodosRoute,
   DemoGuitarsGuitarIdRoute: DemoGuitarsGuitarIdRoute,
   DemoGuitarsIndexRoute: DemoGuitarsIndexRoute,

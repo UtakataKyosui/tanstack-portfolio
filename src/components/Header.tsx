@@ -31,6 +31,13 @@ export default function Header() {
 					>
 						About
 					</Link>
+					<Link
+						to="/works"
+						className="nav-link"
+						activeProps={{ className: "nav-link is-active" }}
+					>
+						Works
+					</Link>
 					<details className="relative w-full sm:w-auto">
 						<summary className="nav-link list-none cursor-pointer">
 							Demos
