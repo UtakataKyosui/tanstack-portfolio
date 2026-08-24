@@ -3,6 +3,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	HeadContent,
+	Link,
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
@@ -45,7 +46,27 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		],
 	}),
 	shellComponent: RootDocument,
+	notFoundComponent: NotFound,
 });
+
+function NotFound() {
+	return (
+		<main className="page-wrap px-4 py-12">
+			<section className="island-shell rounded-2xl p-6 sm:p-8">
+				<p className="island-kicker mb-2">404</p>
+				<h1 className="display-title mb-3 text-3xl font-bold text-[var(--sea-ink)] sm:text-4xl">
+					ページが見つかりません。
+				</h1>
+				<p className="mb-6 m-0 max-w-2xl text-base leading-8 text-[var(--sea-ink-soft)]">
+					URL が変わったか、削除された可能性があります。
+				</p>
+				<Link to="/" className="nav-link">
+					&larr; トップページに戻る
+				</Link>
+			</section>
+		</main>
+	);
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "#/components/ui/badge.tsx";
 import { Button } from "#/components/ui/button.tsx";
 import { Card } from "#/components/ui/card.tsx";
@@ -26,10 +26,10 @@ function App() {
 				</p>
 				<div className="flex flex-wrap gap-3">
 					<Button variant="glass" size="lg" className="rounded-full" asChild>
-						<a href="/about">About Me</a>
+						<Link to="/about">About Me</Link>
 					</Button>
 					<Button variant="glass" size="lg" className="rounded-full" asChild>
-						<a href="/works">Works</a>
+						<Link to="/works">Works</Link>
 					</Button>
 				</div>
 			</section>

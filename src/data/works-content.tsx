@@ -6,4 +6,4 @@ import type { ReactNode } from "react";
  * slug に対応するエントリが無い場合は works/$slug.tsx 側で
  * 「準備中」のプレースホルダーを表示する。
  */
-export const workBodies: Record<string, () => ReactNode> = {};
+export const workBodies: Partial<Record<string, () => ReactNode>> = {};
