@@ -8,7 +8,10 @@
  *
  * 掲載する6〜8件はissue #6の時点でリポジトリ本人が未確定。
  * ここでは候補として挙がった8件を暫定的に全件含めている。
- * 説明文は推測で埋めず、GitHub上の実際の description を裏取りして書く。
+ * 説明文は推測で埋めない。GitHub上に description があるものはそれを使い、
+ * description が無いもの（subscription-manager / ChunkPomodoroExtension /
+ * CronManager の3件、GitHub API で確認済み）は issue #6 本文に書かれている
+ * 説明をそのまま使っている。
  */
 
 export interface LifeSystemEntry {
