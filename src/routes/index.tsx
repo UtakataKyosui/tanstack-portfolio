@@ -3,6 +3,8 @@ import { Badge } from "#/components/ui/badge.tsx";
 import { Button } from "#/components/ui/button.tsx";
 import { Card } from "#/components/ui/card.tsx";
 
+// loader が無い静的コンテンツのみのページなので、router の
+// defaultSsr: false（CSR）をそのまま使う。ssr オプションは明示しない。
 export const Route = createFileRoute("/")({ component: App });
 
 function App() {

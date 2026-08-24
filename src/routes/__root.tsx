@@ -46,6 +46,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	}),
 	shellComponent: RootDocument,
 	notFoundComponent: NotFound,
+	// ルーターの `defaultSsr: false`（issue #9、src/start.ts で設定）を子ルートが
+	// 個別に上書きできるようにするため、ルートルート自身は明示的に ssr: true と
+	// する。TanStack Router は親ルートの ssr が false に解決されると、子ルートが
+	// `ssr: true` を指定していても強制的に false へ倒す（親 false が子に伝播する）
+	// ため、ルートルートを false のままにすると `/works/$slug` の SSR 指定が
+	// 効かなくなってしまう。ルートルート自体は loader を持たない静的レイアウトの
+	// ため、ここを true にしてもコスト増は無い。
+	ssr: true,
 });
 
 function NotFound() {

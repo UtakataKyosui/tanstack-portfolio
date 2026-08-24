@@ -3,6 +3,8 @@ import { Badge } from "#/components/ui/badge.tsx";
 import { Card } from "#/components/ui/card.tsx";
 import { WORK_CATEGORY_LABELS, works } from "#/data/works.ts";
 
+// loader が無く、data/works.ts の静的配列を直接 map しているだけなので、
+// router の defaultSsr: false（CSR）をそのまま使う。
 export const Route = createFileRoute("/works/")({
 	component: WorksIndex,
 });
