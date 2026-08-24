@@ -3,7 +3,7 @@
   "mode": "file-router",
   "typescript": true,
   "packageManager": "pnpm",
-  "includeExamples": true,
+  "includeExamples": false,
   "tailwind": true,
   "projectPreset": "default",
   "addOnOptions": {},
@@ -16,14 +16,9 @@
   "chosenAddOns": [
     "biome",
     "cloudflare",
-    "strapi",
-    "ai",
     "compiler",
-    "mcp",
     "shadcn",
     "t3env",
-    "table",
-    "tanstack-query",
-    "store"
+    "tanstack-query"
   ]
 }
