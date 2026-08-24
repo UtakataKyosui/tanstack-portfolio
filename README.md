@@ -56,7 +56,7 @@ KV, D1, R2, and Durable Object bindings are configured in `wrangler.jsonc` — s
 
 ## GitHub Stats の生成
 
-`src/data/github-stats.json` は、GitHub 上の公開リポジトリの言語構成・使用フレームワークを集計した静的データです。トップページなどで表示する統計情報として、コミットされたファイルをそのままビルドに使います。
+`src/data/github-stats.json` は、GitHub 上の公開リポジトリの言語構成・使用フレームワークを集計した静的データです。`/about` ページで表示する統計情報として、コミットされたファイルをそのままビルドに使います。
 
 再生成する手順:
 
