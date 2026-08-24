@@ -10,7 +10,6 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
-import StoreDevtools from "../lib/demo-store-devtools";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -72,6 +71,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
+				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: 内容は上のモジュール定数リテラルのみで、外部入力は一切混ざらない。初回描画前にテーマを確定させてちらつきを防ぐため、同期スクリプトとして head に埋める必要がある。 */}
 				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
 				<HeadContent />
 			</head>
@@ -89,7 +89,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 							render: <TanStackRouterDevtoolsPanel />,
 						},
 						TanStackQueryDevtools,
-						StoreDevtools,
 					]}
 				/>
 				<Scripts />
