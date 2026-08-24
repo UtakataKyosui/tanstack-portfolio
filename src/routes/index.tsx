@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "#/components/ui/badge.tsx";
 import { Button } from "#/components/ui/button.tsx";
 import { Card } from "#/components/ui/card.tsx";
@@ -15,39 +15,38 @@ function App() {
 					variant="glass"
 					className="mb-3 rounded-full px-3 py-1 text-[0.69rem] font-bold uppercase tracking-[0.16em]"
 				>
-					Personal Portfolio
+					Frontend Engineer
 				</Badge>
 				<h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.02] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-					Start simple, ship quickly.
+					「気をつける」を仕組みに変える。
 				</h1>
 				<p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-					This site intentionally keeps things light: a few routes, clean
-					structure, and the essentials you need to build from scratch.
+					型、CI、自動生成。人の注意力に頼るのではなく、間違えようがない状態を
+					作ることに関心があります。
 				</p>
 				<div className="flex flex-wrap gap-3">
 					<Button variant="glass" size="lg" className="rounded-full" asChild>
-						<a href="/about">About Me</a>
+						<Link to="/about">About Me</Link>
+					</Button>
+					<Button variant="glass" size="lg" className="rounded-full" asChild>
+						<Link to="/works">Works</Link>
 					</Button>
 				</div>
 			</section>
 
-			<section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<section className="mt-8 grid gap-4 sm:grid-cols-3">
 				{[
 					[
-						"Type-Safe Routing",
-						"Routes and links stay in sync across every page.",
+						"型で境界を守る",
+						"文字列や any で誤魔化さず、型で間違いを実行前に弾く。",
 					],
 					[
-						"Server Functions",
-						"Call server code from your UI without creating API boilerplate.",
+						"CI で機械的に判定する",
+						"レビューの見落としに頼らず、基準を機械判定に落とす。",
 					],
 					[
-						"Streaming by Default",
-						"Ship progressively rendered responses for faster experiences.",
-					],
-					[
-						"Tailwind Native",
-						"Design quickly with utility-first styling and reusable tokens.",
+						"生活も仕組みにする",
+						"覚えておくことを減らし、繰り返しを自動化する。",
 					],
 				].map(([title, desc], index) => (
 					<Card
@@ -62,23 +61,6 @@ function App() {
 						<p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
 					</Card>
 				))}
-			</section>
-
-			<section className="island-shell mt-8 rounded-2xl p-6">
-				<p className="island-kicker mb-2">Quick Start</p>
-				<ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
-					<li>
-						Edit <code>src/routes/index.tsx</code> to customize the home page.
-					</li>
-					<li>
-						Update <code>src/components/Header.tsx</code> and{" "}
-						<code>src/components/Footer.tsx</code> for brand links.
-					</li>
-					<li>
-						Add routes in <code>src/routes</code> and tweak visual tokens in{" "}
-						<code>src/styles.css</code>.
-					</li>
-				</ul>
 			</section>
 		</main>
 	);
