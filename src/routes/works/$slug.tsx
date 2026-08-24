@@ -13,6 +13,11 @@ export const Route = createFileRoute("/works/$slug")({
 		}
 		return work;
 	},
+	// ポートフォリオの作品詳細ページは検索エンジンや SNS カードに本文が
+	// 見えてほしい（SEO / OGP 目的）ため、data-only ではなく HTML 自体を
+	// サーバーで組み立てる true を選ぶ。loader 自体はメモリ上の配列参照の
+	// みで外部フェッチが無く軽量なので、SSR のコストは小さい。
+	ssr: true,
 });
 
 function WorkDetail() {

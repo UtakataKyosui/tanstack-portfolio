@@ -4,6 +4,9 @@ import { Card } from "#/components/ui/card.tsx";
 import githubStats from "#/data/github-stats.json";
 import { languageColor } from "#/data/language-colors.ts";
 
+// loader は無く、github-stats.json を静的 import しているだけ
+// （ビルド時にバンドルへ同梱される）なので、router の
+// defaultSsr: false（CSR）をそのまま使う。
 export const Route = createFileRoute("/about")({
 	component: About,
 });
