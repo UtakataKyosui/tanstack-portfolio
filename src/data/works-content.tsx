@@ -440,7 +440,333 @@ function SeverityBadge({ severity }: { severity: ChecklistItem["severity"] }) {
  * slug に対応するエントリが無い場合は works/$slug.tsx 側で
  * 「準備中」のプレースホルダーを表示する。
  */
+function ThisSiteH2({ children }: { children: ReactNode }) {
+	return (
+		<h2 className="display-title mt-10 mb-3 text-2xl font-bold text-[var(--sea-ink)] first:mt-0">
+			{children}
+		</h2>
+	);
+}
+
+function ThisSiteH3({ children }: { children: ReactNode }) {
+	return (
+		<h3 className="mt-6 mb-2 text-lg font-semibold text-[var(--sea-ink)]">
+			{children}
+		</h3>
+	);
+}
+
+function ThisSiteP({ children }: { children: ReactNode }) {
+	return (
+		<p className="m-0 mt-3 text-[0.95rem] leading-7 text-[var(--sea-ink-soft)]">
+			{children}
+		</p>
+	);
+}
+
+function ThisSiteCode({ children }: { children: ReactNode }) {
+	return <code>{children}</code>;
+}
+
+function ThisSiteStatRow({
+	label,
+	value,
+	detail,
+}: {
+	label: string;
+	value: string;
+	detail?: string;
+}) {
+	return (
+		<li className="flex items-baseline justify-between gap-3 border-b border-[var(--line)] py-2 text-sm last:border-b-0">
+			<span className="text-[var(--sea-ink-soft)]">{label}</span>
+			<span className="text-right">
+				<span className="font-mono font-semibold text-[var(--sea-ink)]">
+					{value}
+				</span>
+				{detail && (
+					<span className="ml-2 text-xs text-[var(--sea-ink-soft)]">
+						{detail}
+					</span>
+				)}
+			</span>
+		</li>
+	);
+}
+
+function ThisSiteBody() {
+	return (
+		<article>
+			<ThisSiteP>
+				この記事はこのサイト自体を作品として解説する。作品ページとしては珍しく一人称の感想はほとんど出てこない。代わりに、実装の仕組みと、実際に測定した数値だけを載せる。
+			</ThisSiteP>
+
+			<ThisSiteH2>デザインシステム: 1箇所に定義したガラス表現</ThisSiteH2>
+			<ThisSiteP>
+				サイト全体で使っているすりガラス風のカード表現（ぼかし・グラデーション・縁取り）は、
+				<ThisSiteCode>src/styles.css</ThisSiteCode> の中で{" "}
+				<ThisSiteCode>@utility glass</ThisSiteCode>{" "}
+				として一箇所にだけ定義している。 Tailwind CSS v4 の{" "}
+				<ThisSiteCode>@utility</ThisSiteCode>{" "}
+				記法で定義したユーティリティクラスは、
+				<ThisSiteCode>Card</ThisSiteCode> / <ThisSiteCode>Button</ThisSiteCode>{" "}
+				/ <ThisSiteCode>Badge</ThisSiteCode> それぞれの{" "}
+				<ThisSiteCode>cva</ThisSiteCode>
+				（class-variance-authority）バリアント定義から{" "}
+				<ThisSiteCode>glass</ThisSiteCode> クラス名として参照される。
+			</ThisSiteP>
+			<ThisSiteP>
+				実際の定義は次の通り。色を直接書かず、すべて CSS
+				カスタムプロパティ経由にしている。
+			</ThisSiteP>
+			<pre>
+				<code>{`@utility glass {
+  border: 1px solid var(--line);
+  background: linear-gradient(165deg, var(--surface-strong), var(--surface));
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow:
+    0 1px 0 var(--inset-glint) inset,
+    0 22px 44px rgba(23, 58, 64, 0.1),
+    0 6px 18px rgba(23, 58, 64, 0.08);
+}`}</code>
+			</pre>
+			<ThisSiteP>
+				呼び出し側は、たとえば <ThisSiteCode>Card</ThisSiteCode> の{" "}
+				<ThisSiteCode>glass</ThisSiteCode> バリアントが{" "}
+				<ThisSiteCode>"glass text-[var(--sea-ink)]"</ThisSiteCode>、
+				<ThisSiteCode>Badge</ThisSiteCode> の <ThisSiteCode>glass</ThisSiteCode>{" "}
+				バリアントが <ThisSiteCode>"glass text-[var(--kicker)]"</ThisSiteCode>
+				というように、<ThisSiteCode>glass</ThisSiteCode>{" "}
+				クラスに固有の文字色だけを足す形になっている。ガラスの見た目そのものを
+				コンポーネント側で再定義することはない。
+			</ThisSiteP>
+
+			<ThisSiteH3>ハードコードした色を書かないことの効果</ThisSiteH3>
+			<ThisSiteP>
+				<ThisSiteCode>--surface</ThisSiteCode> /{" "}
+				<ThisSiteCode>--surface-strong</ThisSiteCode> /{" "}
+				<ThisSiteCode>--line</ThisSiteCode> /{" "}
+				<ThisSiteCode>--inset-glint</ThisSiteCode> は{" "}
+				<ThisSiteCode>:root</ThisSiteCode>
+				（ライト）と <ThisSiteCode>.dark</ThisSiteCode>
+				（ダーク）の両方で個別に定義されているCSS変数で、
+				<ThisSiteCode>@utility glass</ThisSiteCode>{" "}
+				側は変数名だけを参照している。実際の値は次の通り。
+			</ThisSiteP>
+			<div className="mt-4 grid gap-4 sm:grid-cols-2">
+				<div className="rounded-xl border border-[var(--line)] p-4">
+					<p className="island-kicker mb-2">Light (:root)</p>
+					<ul className="space-y-1 font-mono text-xs text-[var(--sea-ink-soft)]">
+						<li>--surface: rgba(219, 234, 254, 0.55)</li>
+						<li>--surface-strong: rgba(191, 219, 254, 0.62)</li>
+						<li>--line: rgba(59, 130, 246, 0.28)</li>
+						<li>--inset-glint: rgba(255, 255, 255, 0.75)</li>
+					</ul>
+				</div>
+				<div className="rounded-xl border border-[var(--line)] p-4">
+					<p className="island-kicker mb-2">Dark (.dark)</p>
+					<ul className="space-y-1 font-mono text-xs text-[var(--sea-ink-soft)]">
+						<li>--surface: rgba(30, 58, 95, 0.55)</li>
+						<li>--surface-strong: rgba(23, 46, 79, 0.68)</li>
+						<li>--line: rgba(96, 165, 250, 0.28)</li>
+						<li>--inset-glint: rgba(147, 197, 253, 0.16)</li>
+					</ul>
+				</div>
+			</div>
+			<ThisSiteP>
+				この結果、コンポーネント側のコードに <ThisSiteCode>#fff</ThisSiteCode>{" "}
+				や <ThisSiteCode>rgba(...)</ThisSiteCode>{" "}
+				を一切書かなくても、ルート要素に付く <ThisSiteCode>.dark</ThisSiteCode>{" "}
+				クラスの有無だけでガラス表現がライト/ダーク双方に自動的に対応する。
+				色の切り替えロジックをコンポーネントごとに持つ必要がない、という設計になっている。
+			</ThisSiteP>
+
+			<ThisSiteH2>
+				GitHub統計: 実データによる言語構成とフレームワーク検出
+			</ThisSiteH2>
+			<ThisSiteP>
+				About ページと、このサイト自身の README
+				的な位置づけであるここで表示している言語構成・フレームワーク利用状況は、
+				<ThisSiteCode>scripts/generate-github-stats.mjs</ThisSiteCode>{" "}
+				がビルド時ではなく手動実行のスクリプトとして事前生成した{" "}
+				<ThisSiteCode>src/data/github-stats.json</ThisSiteCode>{" "}
+				を読み込んでいるだけで、フロントエンドはただの静的レンダリングになっている。
+			</ThisSiteP>
+			<ThisSiteH3>集計方法: GitHub GraphQL API</ThisSiteH3>
+			<ThisSiteP>
+				スクリプトは <ThisSiteCode>gh api graphql</ThisSiteCode> 経由で GitHub
+				の GraphQL API を叩き、対象アカウントの公開リポジトリを{" "}
+				<ThisSiteCode>isFork: false</ThisSiteCode>{" "}
+				で絞り込みつつ50件ずつページネーションして全件取得する。各リポジトリについて
+				<ThisSiteCode>languages</ThisSiteCode>{" "}
+				フィールド（サイズ降順で上位10言語）と、後述する3つの依存ファイルの中身を1回のクエリでまとめて取ってきている。
+				取得後、<ThisSiteCode>isArchived</ThisSiteCode> と{" "}
+				<ThisSiteCode>isTemplate</ThisSiteCode> のリポジトリは集計から除外する。
+			</ThisSiteP>
+			<ThisSiteH3>
+				フレームワーク検出: descriptionの正規表現ではなく依存関係の実体
+			</ThisSiteH3>
+			<ThisSiteP>
+				フレームワークの利用状況は、リポジトリの説明文（description）をキーワードでマッチさせるような推測ベースの方法は取っていない。代わりに
+				GraphQL クエリの中で各リポジトリの{" "}
+				<ThisSiteCode>HEAD:package.json</ThisSiteCode> /{" "}
+				<ThisSiteCode>HEAD:Cargo.toml</ThisSiteCode> /{" "}
+				<ThisSiteCode>HEAD:go.mod</ThisSiteCode> をそれぞれ{" "}
+				<ThisSiteCode>object(expression: ...)</ThisSiteCode>{" "}
+				で直接取得し、その中身を解析することで判定している。
+			</ThisSiteP>
+			<ThisSiteP>
+				<ThisSiteCode>package.json</ThisSiteCode> は JSON としてパースし、
+				<ThisSiteCode>dependencies</ThisSiteCode> と{" "}
+				<ThisSiteCode>devDependencies</ThisSiteCode>{" "}
+				を合わせたキー集合に対して、たとえば <ThisSiteCode>React</ThisSiteCode>{" "}
+				なら <ThisSiteCode>"react"</ThisSiteCode>、
+				<ThisSiteCode>TanStack Start</ThisSiteCode> なら{" "}
+				<ThisSiteCode>"@tanstack/react-start"</ThisSiteCode> や{" "}
+				<ThisSiteCode>"@tanstack/start"</ThisSiteCode>{" "}
+				というように定義済みのパッケージ名リストが含まれているかを完全一致で見ている。
+				<ThisSiteCode>Cargo.toml</ThisSiteCode> と{" "}
+				<ThisSiteCode>go.mod</ThisSiteCode>{" "}
+				は構造化パースはせず、テキストとして依存名の文字列が含まれるかを見る簡易な判定（
+				<ThisSiteCode>Cargo.toml</ThisSiteCode>{" "}
+				は改行+パッケージ名+スペースまたは
+				<ThisSiteCode>=</ThisSiteCode>、<ThisSiteCode>go.mod</ThisSiteCode>{" "}
+				はモジュールパスの部分一致）になっている。つまり、実際にそのリポジトリが依存として宣言しているものだけを数えており、READMEやdescriptionの記述内容には一切依存しない。
+			</ThisSiteP>
+
+			<ThisSiteH3>実際の集計結果</ThisSiteH3>
+			<ThisSiteP>
+				直近生成分（
+				<ThisSiteCode>github-stats.json</ThisSiteCode> の{" "}
+				<ThisSiteCode>generatedAt</ThisSiteCode>
+				）の数値。About ページと同じデータソースを使っている。
+			</ThisSiteP>
+			<ul className="mt-3 divide-y-0">
+				<ThisSiteStatRow
+					label="集計対象リポジトリ数"
+					value="209"
+					detail="fork/archived/template除外後"
+				/>
+				<ThisSiteStatRow label="最多言語" value="TypeScript" detail="55.1%" />
+				<ThisSiteStatRow label="2位" value="Rust" detail="21.0%" />
+				<ThisSiteStatRow label="3位" value="Python" detail="5.0%" />
+				<ThisSiteStatRow
+					label="最多利用フレームワーク"
+					value="Serde"
+					detail="27リポジトリ"
+				/>
+				<ThisSiteStatRow label="2位" value="React" detail="24リポジトリ" />
+				<ThisSiteStatRow
+					label="3位"
+					value="Tailwind CSS"
+					detail="21リポジトリ"
+				/>
+			</ul>
+			<ThisSiteP>
+				生成日時と正確な数値は <a href="/about">About ページ</a>{" "}
+				に常に最新のものが表示される（このスクリプトはビルドパイプラインには組み込まれておらず、手動実行で
+				<ThisSiteCode>src/data/github-stats.json</ThisSiteCode>{" "}
+				を更新する運用になっている）。
+			</ThisSiteP>
+
+			<ThisSiteH2>Lighthouse / Core Web Vitals 実測値</ThisSiteH2>
+			<ThisSiteP>
+				本番相当のビルド（<ThisSiteCode>pnpm run build</ThisSiteCode> →{" "}
+				<ThisSiteCode>pnpm run preview</ThisSiteCode>
+				）に対して、Chrome ヘッドレスで Lighthouse
+				を実行して計測した。計測環境は開発用サンドボックス内のコンテナで、
+				実運用のデプロイ先（Cloudflare Workers、#11
+				完了後）とはネットワーク条件が異なる点に注意。
+			</ThisSiteP>
+			<ul className="mt-3">
+				<ThisSiteStatRow label="Performance" value="89" detail="/ 100" />
+				<ThisSiteStatRow label="Accessibility" value="95" detail="/ 100" />
+				<ThisSiteStatRow label="Best Practices" value="96" detail="/ 100" />
+				<ThisSiteStatRow label="SEO" value="100" detail="/ 100" />
+				<ThisSiteStatRow label="LCP" value="0.8 s" />
+				<ThisSiteStatRow label="CLS" value="0" />
+				<ThisSiteStatRow label="TBT" value="0 ms" />
+				<ThisSiteStatRow label="FCP" value="0.8 s" />
+				<ThisSiteStatRow label="Speed Index" value="7.8 s" detail="※下記参照" />
+			</ul>
+			<ThisSiteP>
+				Performance / SEO は満点近くで、LCP・CLS・TBT・FCP
+				はいずれも良好な値になった。一方で Speed Index
+				だけ突出して悪い（7.8秒）。原因を Lighthouse
+				のコンソールログで確認したところ、このサンドボックス環境のプロキシがヘッドレス
+				Chrome からの <ThisSiteCode>fonts.googleapis.com</ThisSiteCode>{" "}
+				へのリクエストを <ThisSiteCode>ERR_CONNECTION_RESET</ThisSiteCode>{" "}
+				で落としており、Web
+				フォント（Fraunces・Manrope）の読み込みがタイムアウトするまでレンダリングが足踏みしていたことが原因だった。実際のデプロイ先（Cloudflare
+				Workers 経由の本番環境）ではこの制約は無いため、Speed Index
+				の値はこのサンドボックス特有のものであり、本番の実測値ではない点は正直に書いておく。
+			</ThisSiteP>
+			<ThisSiteP>
+				アクセシビリティスコアが100点ではない理由も具体的に特定できていて、Lighthouse
+				の <ThisSiteCode>color-contrast</ThisSiteCode>{" "}
+				監査がヘッダーのサイトロゴリンク（コントラスト比 4.31:1、要求は 4.5:1
+				以上）を指摘している。これはこの記事のページに限らず全ページ共通のヘッダーコンポーネントの問題で、この
+				Issue の範囲外だが実測結果としてそのまま記載する。Best Practices
+				が96点なのは、favicon.ico
+				が未設定でリクエストが404になっていること（同じくサイト全体の既存の問題）が理由。
+			</ThisSiteP>
+
+			<ThisSiteH2>アクセシビリティ確認</ThisSiteH2>
+			<ThisSiteH3>キーボード操作</ThisSiteH3>
+			<ThisSiteP>
+				GUI ブラウザの無いサンドボックス環境のため、実際に Tab
+				キーを押しての目視によるフォーカス移動確認は行えなかった。代わりに
+				Lighthouse
+				のアクセシビリティ監査に含まれる決定的なキーボード関連チェック（フォーカス可能性・論理的なタブ順序・ARIAロール整合性・フォーカストラップの有無）をすべて自動実行し、いずれも合格したことを確認している。実機での目視確認は{" "}
+				[TODO: 本人記入]。
+			</ThisSiteP>
+			<ThisSiteH3>コントラスト比</ThisSiteH3>
+			<ThisSiteP>
+				WCAG
+				のコントラスト計算式で、このページ本文が使っている色の組み合わせを実際に計算した。
+			</ThisSiteP>
+			<ul className="mt-3">
+				<ThisSiteStatRow
+					label="本文 (--sea-ink) / 背景 (--bg-base) ライト"
+					value="10.6 : 1"
+				/>
+				<ThisSiteStatRow
+					label="補助テキスト (--sea-ink-soft) / 背景 ライト"
+					value="5.58 : 1"
+				/>
+				<ThisSiteStatRow
+					label="リンク色 (--lagoon-deep) / 背景 ライト"
+					value="4.59 : 1"
+				/>
+				<ThisSiteStatRow
+					label="本文 (--sea-ink) / 背景 (--bg-base) ダーク"
+					value="15.4 : 1"
+				/>
+				<ThisSiteStatRow
+					label="補助テキスト (--sea-ink-soft) / 背景 ダーク"
+					value="10.14 : 1"
+				/>
+				<ThisSiteStatRow
+					label="リンク色 (--lagoon-deep) / 背景 ダーク"
+					value="10.21 : 1"
+				/>
+			</ul>
+			<ThisSiteP>
+				本文・補助テキスト・リンク色は、ライト/ダークいずれも WCAG AA
+				の通常テキスト基準（4.5:1）を満たしている。ただし上で書いた通り、ヘッダーのロゴリンクだけはライトモードで
+				4.31:1 と基準をわずかに下回っており、Lighthouse
+				の自動監査と手計算の両方で同じ結果になった。この修正はヘッダーコンポーネント側の変更が必要なため、この
+				Issue の範囲では実測結果として記録するにとどめる。
+			</ThisSiteP>
+			<ThisSiteH3>スクリーンリーダー</ThisSiteH3>
+			<ThisSiteP>[TODO: 本人記入]</ThisSiteP>
+		</article>
+	);
+}
+
 export const workBodies: Partial<Record<string, () => ReactNode>> = {
+	"this-site": ThisSiteBody,
 	"tauri-invoke-binding": TauriInvokeBindingBody,
 	"is-agent-friendly-ci": () => (
 		<div className="prose-work flex flex-col gap-8">
