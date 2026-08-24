@@ -36,6 +36,42 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content:
 					"「気をつける」を仕組みに変えるフロントエンドエンジニア、UtakataKyosui のポートフォリオ。",
 			},
+			// OGP (SNS でのシェア表示用)
+			{
+				property: "og:type",
+				content: "website",
+			},
+			{
+				property: "og:title",
+				content: "UtakataKyosui — Frontend Engineer",
+			},
+			{
+				property: "og:description",
+				content:
+					"「気をつける」を仕組みに変えるフロントエンドエンジニア、UtakataKyosui のポートフォリオ。",
+			},
+			{
+				property: "og:site_name",
+				content: "UtakataKyosui — Frontend Engineer",
+			},
+			// TODO: og:image / og:url は OGP 画像ファイル (例: public/og-image.png) と
+			// 本番ドメインが確定してから追加する。画像は 1200x630px 推奨。
+			// { property: "og:image", content: "https://<production-domain>/og-image.png" },
+			// { property: "og:url", content: "https://<production-domain>/" },
+			{
+				name: "twitter:card",
+				content: "summary_large_image",
+			},
+			{
+				name: "twitter:title",
+				content: "UtakataKyosui — Frontend Engineer",
+			},
+			{
+				name: "twitter:description",
+				content:
+					"「気をつける」を仕組みに変えるフロントエンドエンジニア、UtakataKyosui のポートフォリオ。",
+			},
+			// TODO: og:image が用意でき次第 twitter:image も追加する。
 		],
 		links: [
 			{
@@ -46,6 +82,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	}),
 	shellComponent: RootDocument,
 	notFoundComponent: NotFound,
+	// ルーターの `defaultSsr: false`（issue #9、src/start.ts で設定）を子ルートが
+	// 個別に上書きできるようにするため、ルートルート自身は明示的に ssr: true と
+	// する。TanStack Router は親ルートの ssr が false に解決されると、子ルートが
+	// `ssr: true` を指定していても強制的に false へ倒す（親 false が子に伝播する）
+	// ため、ルートルートを false のままにすると `/works/$slug` の SSR 指定が
+	// 効かなくなってしまう。ルートルート自体は loader を持たない静的レイアウトの
+	// ため、ここを true にしてもコスト増は無い。
+	ssr: true,
 });
 
 function NotFound() {
