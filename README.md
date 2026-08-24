@@ -54,6 +54,24 @@ For production env vars, run `wrangler secret put MY_VAR` for each secret listed
 KV, D1, R2, and Durable Object bindings are configured in `wrangler.jsonc` — see https://developers.cloudflare.com/workers/wrangler/configuration/.
 
 
+## GitHub Stats の生成
+
+`src/data/github-stats.json` は、GitHub 上の公開リポジトリの言語構成・使用フレームワークを集計した静的データです。`/about` ページで表示する統計情報として、コミットされたファイルをそのままビルドに使います。
+
+再生成する手順:
+
+```bash
+gh auth login   # 未認証の場合のみ。GitHub CLI の認証が必要
+pnpm generate:github-stats
+```
+
+- 実行には [GitHub CLI (`gh`)](https://cli.github.com/) がインストールされ、認証済みであることが必要です。未認証だと `gh api graphql` 呼び出しが失敗します。
+- スクリプトは `scripts/generate-github-stats.mjs` で、`UtakataKyosui` の公開リポジトリ一覧を GraphQL で取得し、`src/data/github-stats.json` を上書き生成します。
+- 生成後は差分を確認し、**`src/data/github-stats.json` をコミットしてください**。このファイルはビルド成果物ではなく、リポジトリにコミットして使う静的データです。
+- **ビルド時には自動実行しません。** デプロイ先の Cloudflare Workers には GitHub 認証トークンを配置していないため、ビルド中に未認証で GitHub API を叩くとレート制限（未認証は60リクエスト/時）にすぐ到達してビルドが不安定になります。そのため統計の更新は手動実行して生成物をコミットする運用とし、`build` スクリプトからは呼び出していません。
+- 更新が必要になるタイミングの目安: 新しいリポジトリを作成した、使用言語・フレームワーク構成が変わった、しばらく再生成していない、など。
+
+
 ## Shadcn
 
 Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
