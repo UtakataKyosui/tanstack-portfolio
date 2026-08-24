@@ -11,3 +11,6 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+# Claude Code background-agent worktrees (local scratch state, not repo content)
+.claude/
