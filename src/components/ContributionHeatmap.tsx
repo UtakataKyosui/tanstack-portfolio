@@ -15,7 +15,10 @@ const LEVEL_COLORS = [
 function buildWeeks(days: ContributionDay[]): (ContributionDay | null)[][] {
 	if (days.length === 0) return [];
 
-	const firstDayOfWeek = new Date(days[0].date).getDay();
+	// contributionCalendar の date は UTC の暦日なので、getDay() ではなく
+	// getUTCDay() で曜日を取る。ローカルタイムゾーンで解釈すると、負の
+	// UTC オフセットの環境で1日ずれて先頭の空白セル数が狂う。
+	const firstDayOfWeek = new Date(days[0].date).getUTCDay();
 	const padded: (ContributionDay | null)[] = [
 		...Array(firstDayOfWeek).fill(null),
 		...days,

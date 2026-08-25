@@ -180,17 +180,22 @@ function withContributionLevels(days) {
   const nonZero = days.map((d) => d.contributionCount).filter((c) => c > 0)
   const sorted = [...nonZero].sort((a, b) => a - b)
   const quartile = (q) => sorted[Math.floor(sorted.length * q)] ?? 0
-  const t1 = quartile(0.25) || 1
-  const t2 = quartile(0.5) || t1
-  const t3 = quartile(0.75) || t2
+  const min = sorted[0] ?? 1
+  // t1 が非ゼロの最小値と同じ値になると、c > 0 の判定と c >= t1 の判定が
+  // 同じ集合を指してしまい level 1 に到達できなくなる。各閾値を
+  // 直前の閾値より必ず大きくして、level 1〜4 のどれかが空集合にならない
+  // ようにする。
+  const t1 = Math.max(quartile(0.25), min + 1)
+  const t2 = Math.max(quartile(0.5), t1 + 1)
+  const t3 = Math.max(quartile(0.75), t2 + 1)
 
   return days.map((d) => {
     const c = d.contributionCount
     let level = 0
-    if (c > 0) level = 1
-    if (c >= t1) level = 2
-    if (c >= t2) level = 3
     if (c >= t3) level = 4
+    else if (c >= t2) level = 3
+    else if (c >= t1) level = 2
+    else if (c > 0) level = 1
     return { date: d.date, count: c, level }
   })
 }
