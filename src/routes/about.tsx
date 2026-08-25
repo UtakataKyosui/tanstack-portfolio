@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ContributionHeatmap } from "#/components/ContributionHeatmap.tsx";
 import { TechIcon } from "#/components/TechIcon.tsx";
 import { Card } from "#/components/ui/card.tsx";
@@ -164,6 +164,12 @@ function About() {
 
 			<section className="island-shell mt-8 rounded-2xl p-6 sm:p-8">
 				<p className="island-kicker mb-4">Writing</p>
+
+				<div className="mb-4">
+					<Link to="/writing" className="nav-link">
+						サイト内の Writing 記事一覧を見る &rarr;
+					</Link>
+				</div>
 
 				{/*
 				 * UtakataTechBooks について: GitHub上でユーザー/組織としての実在を

@@ -135,6 +135,36 @@ pnpm exec wrangler d1 migrations apply tanstack-portfolio-articles --remote
 ```
 
 
+## Writing (Strapi CMS)
+
+`/writing` の記事一覧・詳細ページは、Strapi のヘッドレス CMS から `articles` コンテンツタイプを取得して表示します。このリポジトリには Strapi サーバー自体は含まれていません。別プロセスとして用意してください。
+
+### Strapi 側のセットアップ
+
+1. Strapi プロジェクトを別ディレクトリに用意する（例: `npx create-strapi-app@latest ../server`、[Strapi のクイックスタート](https://docs.strapi.io/dev-docs/quick-start) を参照）
+2. `Article` コンテンツタイプを作成する。`src/types/strapi.ts` の `TArticle` と対応させるため、以下のフィールドを持たせる。
+
+   | フィールド | 型 | 備考 |
+   |---|---|---|
+   | `title` | Text | |
+   | `description` | Text | |
+   | `slug` | UID | `/writing/$slug` の URL に使う |
+   | `cover` | Media（単一） | |
+   | `author` | Relation | `Author` コンテンツタイプへ |
+   | `category` | Relation | `Category` コンテンツタイプへ。`slug` フィールドを持たせる |
+   | `blocks` | Dynamic Zone | `shared.rich-text` / `shared.quote` / `shared.media` / `shared.slider` の4コンポーネントを追加する |
+
+3. **Settings → Users & Permissions plugin → Roles → Public** で `Article`（`author`/`category` を populate する場合はそれらも）の `find` と `findOne` を有効化する。**これを忘れると 403 になり、Strapi が起動していても記事が一件も表示されません。**
+4. `.env.local` に `VITE_STRAPI_URL="http://localhost:1337"` を設定する（ローカル開発時のデフォルト値。既にリポジトリの `.env.local` に設定済み）
+
+### Cloudflare Workers へのデプロイ時の注意
+
+`VITE_*` で始まる環境変数はビルド時にクライアントバンドルへインライニングされます。
+
+- 本番ビルドを行う環境（CI や手元のビルド環境）にも `VITE_STRAPI_URL` を設定してください
+- `http://localhost:1337` は本番の Worker からは到達できません。Strapi Cloud や自前ホスティングなど、公開アクセス可能な URL に差し替えてください
+
+
 ## Shadcn
 
 Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
