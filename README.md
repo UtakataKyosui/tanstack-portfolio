@@ -87,6 +87,54 @@ pnpm generate:github-stats
 - 更新が必要になるタイミングの目安: 新しいリポジトリを作成した、使用言語・フレームワーク構成が変わった、しばらく再生成していない、など。
 
 
+## D1 / Articles Database
+
+記事は Cloudflare D1 に保存する。スキーマは `src/db/schema.ts` に Drizzle ORM で定義しており、`src/db/client.ts` の `getDb()` が `cloudflare:workers` から `env.DB` を取り出して Drizzle クライアントを返す。
+
+### binding の露出について
+
+このアプリは `@cloudflare/vite-plugin` を SSR 環境に読み込んで `pnpm dev` から D1 にアクセスする。server function からは `const { env } = await import("cloudflare:workers")` で `env.DB` が `D1Database` として取得できることを実機で確認済み。ローカル開発時も本番の Worker 実行時と同じ経路になる。
+
+`D1Database` や `Env` の型は `worker-configuration.d.ts` に生成してリポジトリへコミットしている。`wrangler.jsonc` の binding を追加・変更したら次のコマンドで再生成する。
+
+```bash
+pnpm exec wrangler types
+```
+
+### マイグレーションの生成と適用
+
+スキーマを変更したら、まずマイグレーション SQL を生成する。
+
+```bash
+pnpm exec drizzle-kit generate --name <変更内容がわかる名前>
+```
+
+`migrations/` にマイグレーションファイルが追加される。`drizzle.config.ts` の `out` を `wrangler d1 migrations apply` の既定ディレクトリに合わせているため、`migrations_dir` の指定は不要。
+
+ローカルの D1（`.wrangler/state` 配下の SQLite ファイル、gitignore 済み）に適用する。
+
+```bash
+pnpm exec wrangler d1 migrations apply tanstack-portfolio-articles --local
+```
+
+本番の D1 に適用するときは `--remote` を付ける。ただしその前に、次の節で実データベースを作成しておく必要がある。
+
+### 実データベースの作成（本人が実施する）
+
+`wrangler.jsonc` の `d1_databases` に置いてある `database_id` は開発用のダミー値である。実際に Cloudflare 上のリソースとして D1 を作るには、`wrangler login` で認証したうえで以下を実行する。
+
+```bash
+pnpm exec wrangler login
+pnpm exec wrangler d1 create tanstack-portfolio-articles
+```
+
+出力される `database_id` を `wrangler.jsonc` のダミー値と差し替えてから、`--remote` でマイグレーションを適用する。
+
+```bash
+pnpm exec wrangler d1 migrations apply tanstack-portfolio-articles --remote
+```
+
+
 ## Shadcn
 
 Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
