@@ -1,11 +1,11 @@
 {
 	"login": "UtakataKyosui",
-	"generatedAt": "2026-08-25T05:39:36.022Z",
+	"generatedAt": "2026-08-25T13:12:01.824Z",
 	"repoCount": 204,
 	"languages": [
 		{
 			"name": "TypeScript",
-			"bytes": 24076233,
+			"bytes": 24125846,
 			"percent": 55.2
 		},
 		{
@@ -20,17 +20,17 @@
 		},
 		{
 			"name": "HCL",
-			"bytes": 1980455,
-			"percent": 4.5
+			"bytes": 1995665,
+			"percent": 4.6
 		},
 		{
 			"name": "JavaScript",
-			"bytes": 1795844,
+			"bytes": 1799633,
 			"percent": 4.1
 		},
 		{
 			"name": "Shell",
-			"bytes": 1111035,
+			"bytes": 1112973,
 			"percent": 2.5
 		},
 		{
@@ -230,7 +230,7 @@
 		}
 	],
 	"contributions": {
-		"total": 8161,
+		"total": 8189,
 		"days": [
 			{
 				"date": "2025-08-24",
@@ -2064,7 +2064,7 @@
 			},
 			{
 				"date": "2026-08-25",
-				"count": 35,
+				"count": 63,
 				"level": 4
 			}
 		],
