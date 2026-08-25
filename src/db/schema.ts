@@ -16,7 +16,8 @@ export const articles = sqliteTable("articles", {
 		.default(sql`(unixepoch())`),
 	updatedAt: integer("updated_at", { mode: "timestamp" })
 		.notNull()
-		.default(sql`(unixepoch())`),
+		.default(sql`(unixepoch())`)
+		.$onUpdate(() => new Date()),
 });
 
 export type Article = typeof articles.$inferSelect;
