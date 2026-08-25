@@ -21,6 +21,9 @@ query($login: String!, $after: String) {
         name
         isArchived
         isTemplate
+        repositoryTopics(first: 20) {
+          nodes { topic { name } }
+        }
         languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
           edges { size node { name } }
         }
@@ -33,16 +36,33 @@ query($login: String!, $after: String) {
 }
 `
 
-function ghGraphql(after) {
-  const args = [
-    'api',
-    'graphql',
-    '-f',
-    `query=${QUERY}`,
-    '-f',
-    `login=${GITHUB_LOGIN}`,
-  ]
-  if (after) args.push('-f', `after=${after}`)
+const CONTRIBUTIONS_QUERY = `
+query($login: String!) {
+  user(login: $login) {
+    contributionsCollection {
+      contributionCalendar {
+        totalContributions
+        weeks {
+          contributionDays {
+            date
+            contributionCount
+          }
+        }
+      }
+      commitContributionsByRepository(maxRepositories: 100) {
+        repository { name }
+        contributions { totalCount }
+      }
+    }
+  }
+}
+`
+
+function ghGraphql(query, vars) {
+  const args = ['api', 'graphql', '-f', `query=${query}`]
+  for (const [key, value] of Object.entries(vars)) {
+    if (value != null) args.push('-f', `${key}=${value}`)
+  }
   const out = execFileSync('gh', args, {
     encoding: 'utf8',
     maxBuffer: 1024 * 1024 * 64,
@@ -50,11 +70,28 @@ function ghGraphql(after) {
   return JSON.parse(out)
 }
 
+function fetchContributionDays() {
+  const res = ghGraphql(CONTRIBUTIONS_QUERY, { login: GITHUB_LOGIN })
+  if (res.errors) {
+    throw new Error(`GitHub GraphQL error: ${JSON.stringify(res.errors)}`)
+  }
+  const collection = res.data.user.contributionsCollection
+  const calendar = collection.contributionCalendar
+  const days = calendar.weeks.flatMap((week) => week.contributionDays)
+  const commitsByRepo = collection.commitContributionsByRepository.map(
+    (entry) => ({
+      repoName: entry.repository.name,
+      commitCount: entry.contributions.totalCount,
+    }),
+  )
+  return { totalContributions: calendar.totalContributions, days, commitsByRepo }
+}
+
 function fetchAllRepos() {
   const repos = []
   let after = null
   for (;;) {
-    const res = ghGraphql(after)
+    const res = ghGraphql(QUERY, { login: GITHUB_LOGIN, after })
     if (res.errors) {
       throw new Error(`GitHub GraphQL error: ${JSON.stringify(res.errors)}`)
     }
@@ -139,8 +176,53 @@ function detectFrameworks(repo) {
   return [...found]
 }
 
+function withContributionLevels(days) {
+  const nonZero = days.map((d) => d.contributionCount).filter((c) => c > 0)
+  const sorted = [...nonZero].sort((a, b) => a - b)
+  const quartile = (q) => sorted[Math.floor(sorted.length * q)] ?? 0
+  const min = sorted[0] ?? 1
+  // t1 が非ゼロの最小値と同じ値になると、c > 0 の判定と c >= t1 の判定が
+  // 同じ集合を指してしまい level 1 に到達できなくなる。各閾値を
+  // 直前の閾値より必ず大きくして、level 1〜4 のどれかが空集合にならない
+  // ようにする。
+  const t1 = Math.max(quartile(0.25), min + 1)
+  const t2 = Math.max(quartile(0.5), t1 + 1)
+  const t3 = Math.max(quartile(0.75), t2 + 1)
+
+  return days.map((d) => {
+    const c = d.contributionCount
+    let level = 0
+    if (c >= t3) level = 4
+    else if (c >= t2) level = 3
+    else if (c >= t1) level = 2
+    else if (c > 0) level = 1
+    return { date: d.date, count: c, level }
+  })
+}
+
 function main() {
-  const repos = fetchAllRepos().filter((r) => !r.isArchived && !r.isTemplate)
+  const allRepos = fetchAllRepos()
+  const repos = allRepos.filter((r) => !r.isArchived && !r.isTemplate)
+  const { totalContributions, days, commitsByRepo } = fetchContributionDays()
+  const contributionDays = withContributionLevels(days)
+
+  const workRepoNames = new Set(
+    allRepos
+      .filter((r) =>
+        r.repositoryTopics.nodes.some((t) => t.topic.name === 'work'),
+      )
+      .map((r) => r.name),
+  )
+
+  let workCommits = 0
+  let privateCommits = 0
+  for (const { repoName, commitCount } of commitsByRepo) {
+    if (workRepoNames.has(repoName)) {
+      workCommits += commitCount
+    } else {
+      privateCommits += commitCount
+    }
+  }
 
   const languageBytes = {}
   const frameworkRepoCount = {}
@@ -174,11 +256,16 @@ function main() {
     repoCount: repos.length,
     languages,
     frameworks,
+    contributions: {
+      total: totalContributions,
+      days: contributionDays,
+      commitBreakdown: { work: workCommits, private: privateCommits },
+    },
   }
 
   writeFileSync(OUT_PATH, `${JSON.stringify(output, null, 2)}\n`)
   console.log(`Wrote ${OUT_PATH}`)
-  console.log(`repos: ${repos.length}, languages: ${languages.length}, frameworks: ${frameworks.length}`)
+  console.log(`repos: ${repos.length}, languages: ${languages.length}, frameworks: ${frameworks.length}, contribution days: ${contributionDays.length}, work commits: ${workCommits}, private commits: ${privateCommits}`)
 }
 
 main()

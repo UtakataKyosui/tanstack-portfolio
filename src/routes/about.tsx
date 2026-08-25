@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContributionHeatmap } from "#/components/ContributionHeatmap.tsx";
 import { TechIcon } from "#/components/TechIcon.tsx";
 import { Card } from "#/components/ui/card.tsx";
 import githubStats from "#/data/github-stats.json";
@@ -121,6 +122,45 @@ function About() {
 				Based on {githubStats.repoCount} public GitHub repositories, last
 				generated {new Date(githubStats.generatedAt).toLocaleDateString()}.
 			</p>
+
+			<section className="island-shell mt-8 rounded-2xl p-6 sm:p-8">
+				<div className="mb-4 flex items-baseline justify-between gap-4">
+					<p className="island-kicker">Activity (public + private)</p>
+					<p className="text-sm text-[var(--sea-ink-soft)]">
+						{githubStats.contributions.total.toLocaleString()} contributions in
+						the last year
+					</p>
+				</div>
+				<ContributionHeatmap days={githubStats.contributions.days} />
+
+				<div className="mt-4 flex flex-wrap gap-3">
+					<span className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--surface)] px-3 py-1 text-xs font-medium text-[var(--sea-ink)]">
+						<span
+							className="size-2 rounded-full"
+							style={{ backgroundColor: "var(--lagoon-deep)" }}
+						/>
+						Private dev:{" "}
+						{githubStats.contributions.commitBreakdown.private.toLocaleString()}{" "}
+						commits
+					</span>
+					<span className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--surface)] px-3 py-1 text-xs font-medium text-[var(--sea-ink)]">
+						<span
+							className="size-2 rounded-full"
+							style={{ backgroundColor: "var(--sea-ink-soft)" }}
+						/>
+						Work:{" "}
+						{githubStats.contributions.commitBreakdown.work.toLocaleString()}{" "}
+						commits
+					</span>
+				</div>
+
+				<p className="mt-3 text-xs text-[var(--sea-ink-soft)]">
+					GitHub の contributionsCollection API
+					から集計。ヒートマップはコミット・PR・Issue・レビューを含む全アクティビティ（プライベートリポジトリの活動も件数のみカウントに含む）。
+					work/private
+					内訳はリポジトリの直近1年分のコミット数のみを対象とし、topicに「work」が付いたリポジトリを仕事、それ以外を個人開発として集計している。
+				</p>
+			</section>
 
 			<section className="island-shell mt-8 rounded-2xl p-6 sm:p-8">
 				<p className="island-kicker mb-4">Writing</p>
