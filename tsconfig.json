@@ -1,5 +1,8 @@
 {
   "include": ["**/*.ts", "**/*.tsx"],
+  // strapi/ は独自の tsconfig を持つ別プロジェクトなので、
+  // ポートフォリオ側の型チェック対象から外す。
+  "exclude": ["node_modules", "dist", "strapi"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
