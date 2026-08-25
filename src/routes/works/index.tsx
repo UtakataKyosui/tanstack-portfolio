@@ -36,12 +36,26 @@ function WorksIndex() {
 							className="rise-in h-full gap-3 rounded-2xl p-5"
 							style={{ animationDelay: `${index * 90 + 80}ms` }}
 						>
-							<Badge
-								variant="glass"
-								className="w-fit rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.12em]"
-							>
-								{WORK_CATEGORY_LABELS[work.category]}
-							</Badge>
+							<div className="flex flex-wrap items-center gap-1.5">
+								<Badge
+									variant="glass"
+									className="w-fit rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.12em]"
+								>
+									{WORK_CATEGORY_LABELS[work.category]}
+								</Badge>
+								{work.demoUrl && (
+									<Badge
+										variant="glass"
+										className="w-fit gap-1 rounded-full border-[var(--lagoon-deep)] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[var(--lagoon-deep)]"
+									>
+										<span
+											className="size-1.5 rounded-full"
+											style={{ backgroundColor: "var(--lagoon-deep)" }}
+										/>
+										Live
+									</Badge>
+								)}
+							</div>
 							<h2 className="m-0 text-lg font-semibold text-[var(--sea-ink)]">
 								{work.title}
 							</h2>
